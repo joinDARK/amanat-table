@@ -4,4 +4,7 @@ model Tables {
   columns   Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  records   Records[]
+
+  @@map("tables")
 }

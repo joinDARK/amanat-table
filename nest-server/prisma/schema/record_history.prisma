@@ -1,8 +1,10 @@
-model RecordsHistory {
-  id         Int @id @default(autoincrement())
+model RecordHistory {
+  id         Int      @id @default(autoincrement())
   recordName String
   userName   String
   tableName  String
   diff       Json
   changedAt  DateTime @default(now())
+
+  @@map("record_history")
 }

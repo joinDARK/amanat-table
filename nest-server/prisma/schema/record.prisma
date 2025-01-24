@@ -1,0 +1,10 @@
+model Records {
+  id         Int      @id @default(autoincrement())
+  data       Json
+  tableId    Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  table      Tables   @relation(fields: [tableId], references: [id])
+
+  @@map("records")
+}
