@@ -1,0 +1,8 @@
+model RecordsHistory {
+  id         Int @id @default(autoincrement())
+  recordName String
+  userName   String
+  tableName  String
+  diff       Json
+  changedAt  DateTime @default(now())
+}
