@@ -1,5 +1,5 @@
 model RecordsHistory {
-  id         Int @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   recordName String
   userName   String
   tableName  String
