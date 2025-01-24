@@ -2,4 +2,8 @@ model Users {
   id        Int      @id @default(autoincrement())
   login     String   @unique
   password  String
+  roleId    Int
+  role      Roles    @relation(fields: [roleId], references: [id])
+
+  @@map("users")
 }
