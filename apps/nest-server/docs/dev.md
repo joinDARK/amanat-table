@@ -1,5 +1,10 @@
 # Документация к серверу
 
+Примените миграцию для создание БД с помощью Prisma:
+```bash
+npm run db:push
+```
+
 ## Ссылки на документацию конфигурационным файлам проекта
 * [ESLint (.eslintrc.js)](https://eslint.org/docs/latest/use/configure/)
 * [Prettier (.prettierrcs)](https://prettier.io/docs/en/configuration.html)
