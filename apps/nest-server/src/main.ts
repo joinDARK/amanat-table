@@ -9,7 +9,7 @@ async function bootstrap() {
   const logger = app.get(WINSTON_MODULE_NEST_PROVIDER);
   app.useLogger(logger);
   await app.listen(PORT);
-  console.log(`\nServer has started on: \x1b[34mhttp://localhost:${PORT}\x1b[0m`);
+  console.log(`\nServer has started on: \x1b[34mhttp://localhost:${PORT}\x1b[0m\n`);
 }
 
 bootstrap();
