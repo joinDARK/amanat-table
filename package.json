@@ -1,0 +1,24 @@
+{
+  "name": "amanat_table",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm -r run dev",
+    "dev:react": "pnpm -F react-client dev",
+    "dev:nest": "pnpm -F nest-server dev",
+    "build": "pnpm -r run build",
+    "lint": "pnpm -r run lint",
+    "test": "pnpm -r run test",
+    "format": "pnpm exec prettier --write ."
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "pnpm": "^1.43.1",
+    "prettier": "^2.8.0",
+    "typescript": "^4.9.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0"
+}
