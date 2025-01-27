@@ -4,16 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "pnpm -r run dev",
-    "dev:react": "pnpm -F react-client dev",
-    "dev:nest": "pnpm -F nest-server dev",
+    "dev:react": "pnpm --filter react-client run dev",
+    "dev:nest": "pnpm --filter nest-server run dev",
     "build": "pnpm -r run build",
     "lint": "pnpm -r run lint",
-    "test": "pnpm -r run test",
-    "format": "pnpm exec prettier --write ."
+    "test": "pnpm -r run test"
   },
   "devDependencies": {
     "eslint": "^8.0.0",
-    "pnpm": "^1.43.1",
+    "pnpm": "^9.15.4",
     "prettier": "^2.8.0",
     "typescript": "^4.9.0"
   },
