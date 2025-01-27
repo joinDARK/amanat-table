@@ -11,15 +11,10 @@ Amanat Table – это проект-конструктор таблиц, пох
 - **plugins/**  
   Кастомные плагины (extensions), которые могут расширять систему.
 
-## Скрипты
-
-- `pnpm run dev` – запустить все сервисы в режиме разработки.
-- `pnpm build` – собрать все проекты.
-- `pnpm lint` – проверить код с помощью ESLint.
-- `pnpm test` – запустить тесты.
-
-## Установка
+## Запуск
 
 ```bash
 cd amanat_table
 pnpm install
+pnpm run dev:react
+pnpm run dev:nest
