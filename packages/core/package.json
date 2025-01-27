@@ -1,0 +1,16 @@
+{
+  "name": "@myorg/core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "echo \"Test starting core\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^9.19.0",
+    "typescript": "^5.7.3"
+  }
+}
