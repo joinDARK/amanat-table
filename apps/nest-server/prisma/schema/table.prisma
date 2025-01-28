@@ -5,6 +5,6 @@ model Tables {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   records   Records[]
-
+  permissions RolePermission[]
   @@map("tables")
 }
