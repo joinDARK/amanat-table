@@ -4,6 +4,7 @@ import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { RequestLoggerMiddleware } from './logger/logger.middleware';
 import { TableModule } from './table/table.module';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { TableModule } from './table/table.module';
         }),
       ],
     }),
-    TableModule
+    TableModule,
+    RoleModule
   ],
 })
 export class AppModule implements NestModule {

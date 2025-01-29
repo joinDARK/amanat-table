@@ -45,7 +45,7 @@ export class UserService {
         data: {
           login: newLogin,
           password: newPassword,
-          roleId: roleId ?? 1,
+          roleId: roleId,
         },
       });
       return {
@@ -53,7 +53,6 @@ export class UserService {
         "message": "Пользователь успешно обновлен",
       };
     } catch (e) {
-      console.log(e);
       switch ((e as any).code) {
         case 'P2025':
           throw new NotFoundException(`Пользователь с таким id (${id}) не найден`);
@@ -75,7 +74,7 @@ export class UserService {
         where: { id },
       });
       return {
-        "statusCode": 200,
+        "statusCode": 204,
         "message": "Пользователь успешно удален",
       };
     } catch (e) {
