@@ -3,6 +3,7 @@ import { UserModule } from './user/user.module';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { RequestLoggerMiddleware } from './logger/logger.middleware';
+import { TableModule } from './table/table.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { RequestLoggerMiddleware } from './logger/logger.middleware';
           ),
         }),
       ],
-    })
+    }),
+    TableModule
   ],
 })
 export class AppModule implements NestModule {
