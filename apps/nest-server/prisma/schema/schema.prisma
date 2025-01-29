@@ -71,6 +71,8 @@ model TableMeta {
   // Список записей
   records Record[]
 
+  rolePermissions RolePermission[]
+
   @@index([order])
   @@map("table_meta")
 }
