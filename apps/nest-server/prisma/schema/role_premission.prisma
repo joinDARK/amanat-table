@@ -1,0 +1,10 @@
+model RolePermission {
+  id        Int      @id @default(autoincrement())
+  roleId    Int
+  tableId   Int
+  columns   Json     // JSON-массив с разрешенными колонками
+  role      Roles    @relation(fields: [roleId], references: [id])
+  table     Tables   @relation(fields: [tableId], references: [id])
+  @@unique([roleId, tableId])
+  @@map("role_permissions")
+}
