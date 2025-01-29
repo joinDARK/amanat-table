@@ -1,9 +1,129 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
   previewFeatures = ["prismaSchemaFolder"]
 }
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")
+}
+
+// Space
+model Space {
+  id               String  @id @default(cuid())
+  name             String
+
+  // Связь: один Space может иметь несколько Base
+  baseGroup        Base[]
+
+  // Дополнительные поля (credit, timestamps, createdBy и т.д.)
+  credit           Int?
+  deletedTime      DateTime?   @map("deleted_time")
+  createdTime      DateTime    @default(now()) @map("created_time")
+  createdBy        String      @map("created_by")
+  lastModifiedBy   String?     @map("last_modified_by")
+  lastModifiedTime DateTime?   @updatedAt @map("last_modified_time")
+
+  @@map("space")
+}
+
+// Base
+model Base {
+  id               String     @id @default(cuid())
+  spaceId          String     @map("space_id")
+  name             String
+  order            Float
+  deletedTime      DateTime?  @map("deleted_time")
+  createdTime      DateTime   @default(now()) @map("created_time")
+  createdBy        String     @map("created_by")
+  lastModifiedBy   String?    @map("last_modified_by")
+  lastModifiedTime DateTime?  @updatedAt @map("last_modified_time")
+
+  // Связь с Space
+  space    Space    @relation(fields: [spaceId], references: [id])
+
+  // Список таблиц
+  tables   TableMeta[]
+
+  @@index([order])
+  @@map("base")
+}
+
+// TableMeta
+model TableMeta {
+  id               String     @id @default(cuid())
+  baseId           String     @map("base_id")
+  name             String
+  description      String?
+  dbTableName      String     @map("db_table_name")
+  order            Float
+  createdTime      DateTime   @default(now()) @map("created_time")
+  lastModifiedTime DateTime?  @updatedAt @map("last_modified_time")
+  deletedTime      DateTime?  @map("deleted_time")
+  createdBy        String     @map("created_by")
+  lastModifiedBy   String?    @map("last_modified_by")
+
+  // Связь: одна TableMeta принадлежит Base
+  base    Base     @relation(fields: [baseId], references: [id])
+
+  // Список полей (колонок)
+  fields  Column[]
+  // Список записей
+  records Record[]
+
+  rolePermissions RolePermission[]
+
+  @@index([order])
+  @@map("table_meta")
+}
+
+// Field (колонки)
+model Column {
+  id                  String    @id @default(cuid())
+  name                String
+  description         String?
+  options             String?
+  type                String
+  cellValueType       String    @map("cell_value_type")
+  isMultipleCellValue Boolean?  @map("is_multiple_cell_value")
+  dbFieldType         String    @map("db_field_type")
+  dbFieldName         String    @map("db_field_name")
+  notNull             Boolean?  @map("not_null")
+  unique              Boolean?
+  isPrimary           Boolean?  @map("is_primary")
+  isComputed          Boolean?  @map("is_computed")
+  isLookup            Boolean?  @map("is_lookup")
+  isPending           Boolean?  @map("is_pending")
+  hasError            Boolean?  @map("has_error")
+  lookupLinkedFieldId String?   @map("lookup_linked_field_id")
+  lookupOptions       String?   @map("lookup_options")
+  tableId             String    @map("table_id")
+  order               Float
+  createdTime         DateTime  @default(now()) @map("created_time")
+  lastModifiedTime    DateTime? @updatedAt @map("last_modified_time")
+  deletedTime         DateTime? @map("deleted_time")
+  createdBy           String    @map("created_by")
+  lastModifiedBy      String?   @map("last_modified_by")
+
+  // Связь: одна Field принадлежит TableMeta
+  table  TableMeta     @relation(fields: [tableId], references: [id])
+
+  @@index([lookupLinkedFieldId])
+  @@map("columns")
+}
+
+// Record (записи)
+model Record {
+  id               String     @id @default(cuid())
+  tableId          String     @map("table_id")
+  data             Json?
+  createdTime      DateTime   @default(now()) @map("created_time")
+  createdBy        String     @map("created_by")
+  lastModifiedTime DateTime?  @updatedAt @map("last_modified_time")
+  lastModifiedBy   String?    @map("last_modified_by")
+
+  // Связь: одна Record принадлежит TableMeta
+  table TableMeta @relation(fields: [tableId], references: [id])
+
+  @@map("record")
 }
