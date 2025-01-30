@@ -4,11 +4,18 @@ import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { RequestLoggerMiddleware } from './logger/logger.middleware';
 import { TableModule } from './table/table.module';
+import { SpaceModule } from './sapce/sapce.module';
+import { BaseModule } from './base/base.module';
 import { RoleModule } from './role/role.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 @Module({
   imports: [
-    UserModule,
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
+    }),
     WinstonModule.forRoot({
       transports: [
         // 1) Логирование в консоль
@@ -34,9 +41,12 @@ import { RoleModule } from './role/role.module';
         }),
       ],
     }),
+    UserModule,
     TableModule,
+    SpaceModule,
+    BaseModule,
     RoleModule
-  ],
+  ]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
