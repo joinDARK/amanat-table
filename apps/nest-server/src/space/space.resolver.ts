@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
-import { SpaceService } from './sapce.service';
-import { Space } from './entities/sapce.entity';
-import { CreateSpaceInput } from './dto/create-sapce.input';
-import { UpdateSpaceInput } from './dto/update-sapce.input';
+import { SpaceService } from './space.service';
+import { Space } from './entities/space.entity';
+import { CreateSpaceInput } from './dto/create-space.input';
+import { UpdateSpaceInput } from './dto/update-space.input';
 
 @Resolver(() => Space)
 export class SpaceResolver {
