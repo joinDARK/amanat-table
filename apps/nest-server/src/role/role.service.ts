@@ -22,7 +22,7 @@ export class RoleService {
           throw new BadRequestException('Роль уже существует');
         default:
           throw new InternalServerErrorException(
-            'Произошла неизвестная ошибка',
+            'Произошла неизвестная ошибка', e
           );
       }
     }
@@ -73,7 +73,7 @@ export class RoleService {
           throw new NotFoundException(`Роль с таким id (${id}) не найден`);
         default:
           throw new InternalServerErrorException(
-            'Произошла неизвестная ошибка',
+            e
           );
       }
     }
