@@ -1,14 +1,16 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { UserModule } from './user/user.module';
-import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { WinstonModule } from 'nest-winston';
 import { RequestLoggerMiddleware } from './logger/logger.middleware';
-import { TableModule } from './table/table.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+
+// Modules
+import { UserModule } from './user/user.module';
 import { SpaceModule } from './sapce/sapce.module';
 import { BaseModule } from './base/base.module';
 import { RoleModule } from './role/role.module';
-import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { TableMetaModule } from './table-meta/table-meta.module';
 
 @Module({
   imports: [
@@ -42,10 +44,10 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
       ],
     }),
     UserModule,
-    TableModule,
     SpaceModule,
     BaseModule,
-    RoleModule
+    RoleModule,
+    TableMetaModule
   ]
 })
 export class AppModule implements NestModule {
