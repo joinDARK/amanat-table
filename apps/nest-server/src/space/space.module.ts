@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { SpaceService } from './sapce.service';
-import { SpaceResolver } from './sapce.resolver';
+import { SpaceService } from './space.service';
+import { SpaceResolver } from './space.resolver';
 import { PrismaService } from '../prisma.service';
 
 @Module({

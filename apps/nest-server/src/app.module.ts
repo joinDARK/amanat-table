@@ -4,7 +4,7 @@ import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { RequestLoggerMiddleware } from './logger/logger.middleware';
 import { TableModule } from './table/table.module';
-import { SpaceModule } from './sapce/sapce.module';
+import { SpaceModule } from './space/space.module';
 import { BaseModule } from './base/base.module';
 import { RoleModule } from './role/role.module';
 import { GraphQLModule } from '@nestjs/graphql';
