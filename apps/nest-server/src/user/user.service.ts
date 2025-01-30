@@ -1,17 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { hash } from 'bcrypt';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createUser(newLogin: string, newPassword: string, roleId?: number) {
+    const hashedPassword = await hash(newPassword, 10);
+
     try {
       const res = await this.prisma.users.create({
         data: {
           login: newLogin,
-          password: newPassword,
+          password: hashedPassword,
           roleId: roleId ?? 1,
         },
       });
@@ -39,14 +43,22 @@ export class UserService {
   }
 
   async updateUser(id: number, newLogin: string, newPassword: string, roleId: number) {
+    const updateData: Prisma.UsersUpdateInput = {
+      login: newLogin
+    };
+  
+    if (newPassword !== undefined && newPassword !== '') {
+      updateData.password = await hash(newPassword, 10);
+    }
+  
+    if (roleId !== undefined) {
+      updateData.role = { connect: { id: roleId } };
+    }
+
     try {
       const res = await this.prisma.users.update({
         where: { id },
-        data: {
-          login: newLogin,
-          password: newPassword,
-          roleId: roleId,
-        },
+        data: updateData,
       });
       return {
         "statusCode": 200,
@@ -62,7 +74,7 @@ export class UserService {
           throw new NotFoundException('Роль не найдена');
         default:
           throw new InternalServerErrorException(
-            'Произошла неизвестная ошибка',
+            "Произошла неизвестная ошибка",
           );
       }
     }
