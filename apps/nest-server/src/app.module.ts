@@ -6,6 +6,7 @@ import { RequestLoggerMiddleware } from './logger/logger.middleware';
 import { TableModule } from './table/table.module';
 import { SpaceModule } from './sapce/sapce.module';
 import { BaseModule } from './base/base.module';
+import { RoleModule } from './role/role.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
@@ -43,7 +44,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
     UserModule,
     TableModule,
     SpaceModule,
-    BaseModule
+    BaseModule,
+    RoleModule
   ]
 })
 export class AppModule implements NestModule {
