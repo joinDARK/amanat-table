@@ -9,6 +9,8 @@ import { BaseModule } from './base/base.module';
 import { RoleModule } from './role/role.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ColumnModule } from './column/column.module';
+import { ColumnModule } from './column/column.module';
 
 @Module({
   imports: [
@@ -45,7 +47,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
     TableModule,
     SpaceModule,
     BaseModule,
-    RoleModule
+    RoleModule,
+    ColumnModule
   ]
 })
 export class AppModule implements NestModule {
