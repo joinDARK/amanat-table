@@ -24,8 +24,7 @@ export class UserController {
 
   @Get()
   @Roles('admin')
-  read(@Req() req: Request) {
-    (req as any).tableName = "Пользователи (users)";
+  read() {
     return this.userService.readUsers();
   }
 
