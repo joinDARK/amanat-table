@@ -1,83 +1,102 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["prismaSchemaFolder"]
 }
 
 datasource db {
   provider = "sqlite"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
-// Space
+// --------------------------------------------------
+// 1. Space
+//   - При удалении Space → Base сохраняются, но base.spaceId = NULL
+// --------------------------------------------------
 model Space {
-  id               String  @id @default(cuid())
+  id               String    @id @default(cuid())
   name             String
 
-  // Связь: один Space может иметь несколько Base
+  // Массив связанных Base
   baseGroup        Base[]
 
-  // Дополнительные поля (credit, timestamps, createdBy и т.д.)
+  // Дополнительные поля
   credit           Int?
-  deletedTime      DateTime?   @map("deleted_time")
-  createdTime      DateTime    @default(now()) @map("created_time")
-  createdBy        String      @map("created_by")
-  lastModifiedBy   String?     @map("last_modified_by")
-  lastModifiedTime DateTime?   @updatedAt @map("last_modified_time")
+  deletedTime      DateTime? @map("deleted_time")
+  createdTime      DateTime  @default(now()) @map("created_time")
+  createdBy        String    @map("created_by")
+  lastModifiedBy   String?   @map("last_modified_by")
+  lastModifiedTime DateTime? @updatedAt @map("last_modified_time")
 
   @@map("space")
 }
 
-// Base
+// --------------------------------------------------
+// 2. Base
+//   - spaceId опционален (String?),
+//   - onDelete: SetNull (чтобы не удалять Base при удалении Space)
+//   - но при удалении Base → каскадно удалятся TableMeta (см. ниже)
+// --------------------------------------------------
 model Base {
-  id               String     @id @default(cuid())
-  spaceId          String     @map("space_id")
+  id               String    @id @default(cuid())
+  // Опциональный FK на Space
+  spaceId          String?   @map("space_id")
+
+  // Связь c Space => onDelete: SetNull
+  space            Space?    @relation(fields: [spaceId], references: [id], onDelete: SetNull)
+
   name             String
   order            Float
-  deletedTime      DateTime?  @map("deleted_time")
-  createdTime      DateTime   @default(now()) @map("created_time")
-  createdBy        String     @map("created_by")
-  lastModifiedBy   String?    @map("last_modified_by")
-  lastModifiedTime DateTime?  @updatedAt @map("last_modified_time")
+  deletedTime      DateTime? @map("deleted_time")
+  createdTime      DateTime  @default(now()) @map("created_time")
+  createdBy        String    @map("created_by")
+  lastModifiedBy   String?   @map("last_modified_by")
+  lastModifiedTime DateTime? @updatedAt @map("last_modified_time")
 
-  // Связь с Space
-  space    Space    @relation(fields: [spaceId], references: [id])
-
-  // Список таблиц
-  tables   TableMeta[]
+  // Список таблиц: при удалении Base → TableMeta удаляются каскадно
+  tables           TableMeta[]
 
   @@index([order])
   @@map("base")
 }
 
-// TableMeta
+// --------------------------------------------------
+// 3. TableMeta
+//   - baseId обязателен (String),
+//   - onDelete: Cascade => при удалении Base → удаляем связанные TableMeta
+//   - При удалении TableMeta → каскадно удаляются Column и Record (см. ниже)
+// --------------------------------------------------
 model TableMeta {
-  id               String     @id @default(cuid())
-  baseId           String     @map("base_id")
+  id               String    @id @default(cuid())
+  baseId           String    @map("base_id")
+  base             Base      @relation(fields: [baseId], references: [id], onDelete: Cascade)
+
   name             String
   description      String?
-  dbTableName      String     @map("db_table_name")
+  dbTableName      String    @map("db_table_name")
   order            Float
-  createdTime      DateTime   @default(now()) @map("created_time")
-  lastModifiedTime DateTime?  @updatedAt @map("last_modified_time")
-  deletedTime      DateTime?  @map("deleted_time")
-  createdBy        String     @map("created_by")
-  lastModifiedBy   String?    @map("last_modified_by")
+  createdTime      DateTime  @default(now()) @map("created_time")
+  lastModifiedTime DateTime? @updatedAt @map("last_modified_time")
+  deletedTime      DateTime? @map("deleted_time")
+  createdBy        String    @map("created_by")
+  lastModifiedBy   String?   @map("last_modified_by")
 
-  // Связь: одна TableMeta принадлежит Base
-  base    Base     @relation(fields: [baseId], references: [id])
+  fields           Column[]
+  records          Record[]
 
-  // Список полей (колонок)
-  fields  Column[]
-  // Список записей
-  records Record[]
-
-  rolePermissions RolePermission[]
+  // Обратная сторона связи:
+  rolePermissions  RolePermission[]
 
   @@index([order])
   @@map("table_meta")
 }
 
-// Field (колонки)
+
+// --------------------------------------------------
+// 4. Column
+//   - tableId обязателен (String),
+//   - onDelete: Cascade => при удалении TableMeta → удаляем Column
+//   - self-relation (lookupLinkedFieldId) используем onDelete: SetNull
+// --------------------------------------------------
 model Column {
   id                  String    @id @default(cuid())
   name                String
@@ -96,16 +115,15 @@ model Column {
   isPending           Boolean?  @map("is_pending")
   hasError            Boolean?  @map("has_error")
   
-  /// Это поле хранит внешний ключ на другую колонку, если "lookup" действительно ссылается на неё
+  // Self-relation для lookup
   lookupLinkedFieldId String?   @map("lookup_linked_field_id")
-
-  /// Здесь мы указываем, что это связь (self-relation) на ту же модель Column
-  lookupLinkedField   Column?   @relation("LookupFieldRelation", fields: [lookupLinkedFieldId], references: [id])
-
-  /// Обратная сторона связи: если нужно, чтобы та колонка "знала", какие колонки на неё ссылаются
+  lookupLinkedField   Column?   @relation("LookupFieldRelation", fields: [lookupLinkedFieldId], references: [id], onDelete: SetNull)
   linkedByFields      Column[]  @relation("LookupFieldRelation")
 
+  // Связь на TableMeta => onDelete: Cascade
   tableId             String    @map("table_id")
+  table               TableMeta @relation(fields: [tableId], references: [id], onDelete: Cascade)
+
   order               Float
   createdTime         DateTime  @default(now()) @map("created_time")
   lastModifiedTime    DateTime? @updatedAt @map("last_modified_time")
@@ -113,26 +131,27 @@ model Column {
   createdBy           String    @map("created_by")
   lastModifiedBy      String?   @map("last_modified_by")
 
-  // Связь на TableMeta
-  table               TableMeta @relation(fields: [tableId], references: [id])
-
   @@index([lookupLinkedFieldId])
   @@map("columns")
 }
 
-
-// Record (записи)
+// --------------------------------------------------
+// 5. Record
+//   - tableId обязателен (String),
+//   - onDelete: Cascade => при удалении TableMeta → удаляем Record
+// --------------------------------------------------
 model Record {
   id               String     @id @default(cuid())
   tableId          String     @map("table_id")
+
+  // При удалении TableMeta → Record удаляется каскадно
+  table            TableMeta  @relation(fields: [tableId], references: [id], onDelete: Cascade)
+
   data             Json?
   createdTime      DateTime   @default(now()) @map("created_time")
   createdBy        String     @map("created_by")
   lastModifiedTime DateTime?  @updatedAt @map("last_modified_time")
   lastModifiedBy   String?    @map("last_modified_by")
-
-  // Связь: одна Record принадлежит TableMeta
-  table TableMeta @relation(fields: [tableId], references: [id])
 
   @@map("record")
 }
