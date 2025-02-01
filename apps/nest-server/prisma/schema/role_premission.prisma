@@ -1,10 +1,10 @@
 model RolePermission {
-  id            Int      @id @default(autoincrement())
-  roleId        Int
-  tableId       String
-  // todo columns
-  role          Roles    @relation(fields: [roleId], references: [id])
-  table         TableMeta   @relation(fields: [tableId], references: [id])
+  id      Int       @id @default(autoincrement())
+  roleId  Int
+  tableId String
+  table   TableMeta @relation(fields: [tableId], references: [id])
+  role    Roles     @relation(fields: [roleId], references: [id])
+
   @@unique([roleId, tableId])
   @@map("role_permissions")
 }
