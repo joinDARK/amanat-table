@@ -27,7 +27,9 @@ export class TableMetaService {
   async findAll() {
     return this.prisma.tableMeta.findMany({
       include: {
-        base: true,    // если нужно подтянуть Base
+        base: {
+          include: { space: true },  // чтобы сразу подтянуть Space
+        },
         fields: true,  // если нужно подтянуть Field (columns)
         records: true, // если нужно подтянуть записи
       },
@@ -39,7 +41,9 @@ export class TableMetaService {
     return this.prisma.tableMeta.findUnique({
       where: { id },
       include: {
-        base: true,
+        base: {
+          include: { space: true },  // чтобы сразу подтянуть Space
+        },
         fields: true,
         records: true,
       },

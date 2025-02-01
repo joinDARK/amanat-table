@@ -95,8 +95,16 @@ model Column {
   isLookup            Boolean?  @map("is_lookup")
   isPending           Boolean?  @map("is_pending")
   hasError            Boolean?  @map("has_error")
+  
+  /// Это поле хранит внешний ключ на другую колонку, если "lookup" действительно ссылается на неё
   lookupLinkedFieldId String?   @map("lookup_linked_field_id")
-  lookupOptions       String?   @map("lookup_options")
+
+  /// Здесь мы указываем, что это связь (self-relation) на ту же модель Column
+  lookupLinkedField   Column?   @relation("LookupFieldRelation", fields: [lookupLinkedFieldId], references: [id])
+
+  /// Обратная сторона связи: если нужно, чтобы та колонка "знала", какие колонки на неё ссылаются
+  linkedByFields      Column[]  @relation("LookupFieldRelation")
+
   tableId             String    @map("table_id")
   order               Float
   createdTime         DateTime  @default(now()) @map("created_time")
@@ -105,12 +113,13 @@ model Column {
   createdBy           String    @map("created_by")
   lastModifiedBy      String?   @map("last_modified_by")
 
-  // Связь: одна Field принадлежит TableMeta
-  table  TableMeta     @relation(fields: [tableId], references: [id])
+  // Связь на TableMeta
+  table               TableMeta @relation(fields: [tableId], references: [id])
 
   @@index([lookupLinkedFieldId])
   @@map("columns")
 }
+
 
 // Record (записи)
 model Record {

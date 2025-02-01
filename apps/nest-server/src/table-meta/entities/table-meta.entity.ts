@@ -1,3 +1,6 @@
+import { Base } from '@/src/base/entities/base.entity';
+import { Column } from '@/src/column/entities/column.entity';
+import { Record } from '@/src/record/entities/record.entity';
 import { ObjectType, Field, Float } from '@nestjs/graphql';
 
 @ObjectType()
@@ -26,7 +29,13 @@ export class TableMeta {
   @Field({ nullable: true })
   lastModifiedTime?: Date;
 
-  // Если нужно вернуть связанные данные
-  // (Например, Base или Fields), то добавляются
-  // отдельные поля, также как @Field(() => Base) ...
+  @Field(() => Base, { nullable: true })
+  base?: Base;
+
+  @Field(() => [Column], { nullable: true })
+  fields?: Column[];
+
+  // Связанные записи
+  @Field(() => [Record], { nullable: true })
+  records?: Record[];
 }

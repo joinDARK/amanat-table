@@ -1,6 +1,6 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Space } from '../../sapce/entities/sapce.entity';
-// import { TableMeta } from '../../table-meta/entities/table-meta.entity';
+import { TableMeta } from '../../table-meta/entities/table-meta.entity';
 
 @ObjectType()
 export class Base {
@@ -16,8 +16,8 @@ export class Base {
   @Field(() => Space)
   space: Space;
 
-  // @Field(() => [TableMeta], { nullable: true })
-  // tables?: TableMeta[];
+  @Field(() => [TableMeta], { nullable: true })
+  tables?: TableMeta[];
 
   @Field()
   order: number;

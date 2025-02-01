@@ -11,6 +11,8 @@ import { SpaceModule } from './sapce/sapce.module';
 import { BaseModule } from './base/base.module';
 import { RoleModule } from './role/role.module';
 import { TableMetaModule } from './table-meta/table-meta.module';
+import { ColumnModule } from './column/column.module';
+import { RecordModule } from './record/record.module';
 
 @Module({
   imports: [
@@ -47,7 +49,9 @@ import { TableMetaModule } from './table-meta/table-meta.module';
     SpaceModule,
     BaseModule,
     RoleModule,
-    TableMetaModule
+    TableMetaModule,
+    ColumnModule,
+    RecordModule
   ]
 })
 export class AppModule implements NestModule {
