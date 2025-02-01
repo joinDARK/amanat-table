@@ -10,7 +10,7 @@ import { RoleModule } from './role/role.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ColumnModule } from './column/column.module';
-import { ColumnModule } from './column/column.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -48,7 +48,8 @@ import { ColumnModule } from './column/column.module';
     SpaceModule,
     BaseModule,
     RoleModule,
-    ColumnModule
+    ColumnModule,
+    AuthModule
   ]
 })
 export class AppModule implements NestModule {
