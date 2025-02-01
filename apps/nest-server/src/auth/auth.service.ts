@@ -26,7 +26,9 @@ export class AuthService {
         }
       })
 
-      if(!res || !compare(user.password, res.password)) {
+      console.log(res)
+
+      if(!res || !await compare(user.password, res.password)) {
         throw new BadRequestException("Неверный логин или пароль")
       } else {
         const payload = { login: res.login, role: res.role.name };
