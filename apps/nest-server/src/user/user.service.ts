@@ -74,7 +74,7 @@ export class UserService {
           throw new NotFoundException('Роль не найдена');
         default:
           throw new InternalServerErrorException(
-            "Произошла неизвестная ошибка",
+            e
           );
       }
     }

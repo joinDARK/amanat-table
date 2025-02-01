@@ -28,7 +28,7 @@ export class RecordHistoryInterceptor implements NestInterceptor {
     let recordName;
 
     return next.handle().pipe(
-      tap(async (result) => {
+      tap((result) => {
         const tableName = request.tableName || 'Неизвестная таблица (Ошибка)';
         let diff: any = {};
         // В зависимости от HTTP-метода определяем, что логировать
@@ -48,9 +48,7 @@ export class RecordHistoryInterceptor implements NestInterceptor {
           // Для остальных методов ничего не делаем
           return;
         }
-
-        try {
-          await this.prisma.recordHistory.create({
+          this.prisma.recordHistory.create({
             data: {
               recordName,
               userName,
@@ -58,10 +56,10 @@ export class RecordHistoryInterceptor implements NestInterceptor {
               diff,
               // Поле changedAt установится по умолчанию
             },
-          });
-        } catch (error) {
-          console.error('Ошибка при сохранении истории изменений:', error);
-        }
+          })
+          .catch((error) =>
+            console.error('Ошибка при записи истории изменений:', error),
+          );
       }),
     );
   }
