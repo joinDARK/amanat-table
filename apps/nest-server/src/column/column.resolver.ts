@@ -5,6 +5,7 @@ import { CreateColumnInput } from './dto/create-column.input';
 import { UpdateColumnInput } from './dto/update-column.input';
 
 @Resolver(() => Column)
+
 export class ColumnResolver {
   constructor(private readonly columnService: ColumnService) {}
 
@@ -16,11 +17,13 @@ export class ColumnResolver {
   }
 
   @Query(() => [Column], { name: 'columns' })
+
   findAll() {
     return this.columnService.findAll();
   }
 
   @Query(() => Column, { name: 'column' })
+  
   findOne(@Args('id') id: string) {
     return this.columnService.findOne(id);
   }
@@ -35,6 +38,7 @@ export class ColumnResolver {
 
   @Mutation(() => Column)
   removeColumn(@Args('id') id: string) {
+
     return this.columnService.remove(id);
   }
 }

@@ -1,9 +1,9 @@
 model Users {
-  id        Int      @id @default(autoincrement())
-  login     String   @unique
-  password  String
-  roleId    Int
-  role      Roles    @relation(fields: [roleId], references: [id])
+  id       Int    @id @default(autoincrement())
+  login    String @unique
+  password String
+  roleId   Int    @default(1)
+  role     Roles  @relation(fields: [roleId], references: [id], onDelete: SetDefault)
 
   @@map("users")
 }

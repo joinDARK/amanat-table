@@ -9,10 +9,14 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { UserModule } from './user/user.module';
 import { SpaceModule } from './sapce/sapce.module';
 import { BaseModule } from './base/base.module';
-import { RoleModule } from './role/role.module';
 import { TableMetaModule } from './table-meta/table-meta.module';
 import { ColumnModule } from './column/column.module';
 import { RecordModule } from './record/record.module';
+import { TableModule } from './table/table.module';
+import { RoleModule } from './role/role.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -52,6 +56,7 @@ import { RecordModule } from './record/record.module';
     TableMetaModule,
     ColumnModule,
     RecordModule
+    AuthModule
   ]
 })
 export class AppModule implements NestModule {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { CreateSpaceInput } from './dto/create-sapce.input';
-import { UpdateSpaceInput } from './dto/update-sapce.input';
+import { CreateSpaceInput } from './dto/create-space.input';
+import { UpdateSpaceInput } from './dto/update-space.input';
 
 @Injectable()
 export class SpaceService {

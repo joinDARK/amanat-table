@@ -26,6 +26,7 @@ model Space {
   createdBy        String    @map("created_by")
   lastModifiedBy   String?   @map("last_modified_by")
   lastModifiedTime DateTime? @updatedAt @map("last_modified_time")
+  baseGroup        Base[]
 
   @@map("space")
 }
@@ -89,7 +90,6 @@ model TableMeta {
   @@index([order])
   @@map("table_meta")
 }
-
 
 // --------------------------------------------------
 // 4. Column
