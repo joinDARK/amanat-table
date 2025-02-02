@@ -1,26 +1,75 @@
-import { Injectable } from '@nestjs/common';
-import { CreateColumnInput } from './dto/column-create.dto';
-import { UpdateColumnInput } from './dto/column-update.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { CreateColumnInput } from './dto/create-column.input';
+import { UpdateColumnInput } from './dto/update-column.input';
 
 @Injectable()
 export class ColumnService {
-  create(createColumnInput: CreateColumnInput) {
-    return 'This action adds a new column';
+  constructor(private prisma: PrismaService) {}
+
+  async create(createColumnInput: CreateColumnInput) {
+    const {
+      tableId,
+      lookupLinkedFieldId,
+      ...rest
+    } = createColumnInput;
+
+    return this.prisma.column.create({
+      data: {
+        ...rest,
+        table: {
+          connect: { id: tableId },
+        },
+        // Если используете self-relation для lookup
+        ...(lookupLinkedFieldId
+          ? {
+              lookupLinkedField: {
+                connect: { id: lookupLinkedFieldId },
+              },
+            }
+          : {}),
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all column`;
+  async findAll() {
+    return this.prisma.column.findMany({
+      include: {
+        // Если нужно тянуть связанную TableMeta:
+        table: true,
+        // Если используете self-relation для lookup:
+        lookupLinkedField: true,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} column`;
+  async findOne(id: string) {
+    const column = await this.prisma.column.findUnique({
+      where: { id },
+      include: {
+        table: true,
+        lookupLinkedField: true,
+      },
+    });
+    if (!column) {
+      throw new NotFoundException(`Column with id=${id} not found`);
+    }
+    return column;
   }
 
-  update(id: number, updateColumnInput: UpdateColumnInput) {
-    return `This action updates a #${id} column`;
+  async update(id: string, updateColumnInput: UpdateColumnInput) {
+    // Можно проверить, существует ли запись
+    // await this.findOne(id);
+
+    return this.prisma.column.update({
+      where: { id },
+      data: updateColumnInput,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} column`;
+  async remove(id: string) {
+    return this.prisma.column.delete({
+      where: { id },
+    });
   }
 }
