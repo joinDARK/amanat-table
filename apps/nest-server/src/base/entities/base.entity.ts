@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Space } from '../../sapce/entities/sapce.entity';
+import { Space } from '../../space/entities/space.entity';
 import { TableMeta } from '../../table-meta/entities/table-meta.entity';
 
 @ObjectType()
