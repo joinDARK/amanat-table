@@ -1,15 +1,21 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { UserModule } from './user/user.module';
-import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { WinstonModule } from 'nest-winston';
 import { RequestLoggerMiddleware } from './logger/logger.middleware';
-import { TableModule } from './table/table.module';
-import { SpaceModule } from './space/space.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+
+// Modules
+import { UserModule } from './user/user.module';
+import { SpaceModule } from './sapce/sapce.module';
 import { BaseModule } from './base/base.module';
+import { TableMetaModule } from './table-meta/table-meta.module';
+import { ColumnModule } from './column/column.module';
+import { RecordModule } from './record/record.module';
+import { TableModule } from './table/table.module';
 import { RoleModule } from './role/role.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { ColumnModule } from './column/column.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -44,11 +50,12 @@ import { AuthModule } from './auth/auth.module';
       ],
     }),
     UserModule,
-    TableModule,
     SpaceModule,
     BaseModule,
     RoleModule,
+    TableMetaModule,
     ColumnModule,
+    RecordModule
     AuthModule
   ]
 })
