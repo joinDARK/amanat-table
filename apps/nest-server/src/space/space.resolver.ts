@@ -1,15 +1,19 @@
-import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ID, Context } from '@nestjs/graphql';
 import { SpaceService } from './space.service';
 import { Space } from './entities/space.entity';
 import { CreateSpaceInput } from './dto/create-space.input';
 import { UpdateSpaceInput } from './dto/update-space.input';
+import { UseInterceptors } from '@nestjs/common';
+import { RecordHistoryInterceptor } from '../record-history/record-history.interceptor';
 
 @Resolver(() => Space)
+@UseInterceptors(RecordHistoryInterceptor)
 export class SpaceResolver {
   constructor(private readonly spaceService: SpaceService) {}
 
   @Mutation(() => Space)
-  createSpace(@Args('createSpaceInput') createSpaceInput: CreateSpaceInput) {
+  createSpace(@Args('createSpaceInput') createSpaceInput: CreateSpaceInput, @Context() context: any,) {
+    context.req.tableName = "Места (spaces)";
     return this.spaceService.create(createSpaceInput);
   }
 
