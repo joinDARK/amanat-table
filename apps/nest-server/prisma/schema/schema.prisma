@@ -15,10 +15,6 @@ datasource db {
 model Space {
   id               String    @id @default(cuid())
   name             String
-
-  // Массив связанных Base
-  baseGroup        Base[]
-
   // Дополнительные поля
   credit           Int?
   deletedTime      DateTime? @map("deleted_time")
