@@ -1,0 +1,16 @@
+{
+  "name": "@amanat/schema",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "zod": "^3.24.1"
+  }
+}
