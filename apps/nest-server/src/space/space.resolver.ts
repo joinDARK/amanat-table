@@ -13,7 +13,7 @@ export class SpaceResolver {
 
   @Mutation(() => Space)
   createSpace(@Args('createSpaceInput') createSpaceInput: CreateSpaceInput, @Context() context: any,) {
-    context.req.tableName = "Места (spaces)";
+    context.req.tableName = "Пространство (space)";
     return this.spaceService.create(createSpaceInput);
   }
 
@@ -28,12 +28,14 @@ export class SpaceResolver {
   }
 
   @Mutation(() => Space)
-  updateSpace(@Args('updateSpaceInput') updateSpaceInput: UpdateSpaceInput) {
+  updateSpace(@Args('updateSpaceInput') updateSpaceInput: UpdateSpaceInput, @Context() context: any,) {
+    context.req.tableName = "Пространство (space)";
     return this.spaceService.update(updateSpaceInput.id, updateSpaceInput);
   }
 
   @Mutation(() => Space)
-  removeSpace(@Args('id', { type: () => ID }) id: string) {
+  removeSpace(@Args('id', { type: () => ID }) id: string, @Context() context: any,) {
+    context.req.tableName = "Пространство (space)";
     return this.spaceService.remove(id);
   }
 }

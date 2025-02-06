@@ -5,12 +5,12 @@ export class UpdateSpaceInput {
   @Field(() => ID)
   id: string;
 
+  @Field()
+  lastModifiedBy: string;
+
   @Field({ nullable: true })
   name?: string;
 
   @Field({ nullable: true })
   credit?: number;
-
-  @Field({ nullable: true })
-  lastModifiedBy?: string;
 }

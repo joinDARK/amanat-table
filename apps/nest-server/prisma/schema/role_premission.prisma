@@ -1,10 +1,27 @@
 model RolePermission {
   id      Int       @id @default(autoincrement())
   roleId  Int
-  tableId String
+  tables  Int[]
   table   TableMeta @relation(fields: [tableId], references: [id])
   role    Roles     @relation(fields: [roleId], references: [id])
 
+  actions RolePermissionAction[]
+
   @@unique([roleId, tableId])
   @@map("role_permissions")
+}
+
+model RolePermissionAction {
+  id               Int    @id @default(autoincrement())
+  rolePermissionId Int
+  action           Action
+
+  rolePermission RolePermission @relation(fields: [rolePermissionId], references: [id])
+}
+
+enum Action {
+  READ
+  CREATE
+  UPDATE
+  DELETE
 }

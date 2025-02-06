@@ -46,11 +46,20 @@ export class RecordHistoryInterceptor implements NestInterceptor {
       recordId = args?.id; // ID записи из аргументов GraphQL
       for (const key in args) {
         const val = args[key];
-        if (val && typeof val === 'object' && 'createdBy' in val) {
-          userName = val.createdBy || 'Неизвестный пользователь (Ошибка)';
-          break;
+        
+        if(val && typeof val === 'object') {
+          if ('createdBy' in val) {
+            userName = val.createdBy || 'Неизвестный пользователь (Ошибка)';
+            break;
+          }
+  
+          else if('lastModifiedBy' in val){
+            userName = val.lastModifiedBy || 'Неизвестный пользователь (Ошибка)';
+            break;
+          }
         }
       }
+
       const info = gqlContext.getInfo();
       const operation = info.operation.operation; // 'query', 'mutation', 'subscription'
 
